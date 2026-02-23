@@ -1,0 +1,139 @@
+<div class="modulo-container">
+  
+  <div class="modulo-header">
+    <div>
+      <h2>📅 Citas Médicas</h2>
+      <p>Agendamiento y control de turnos</p>
+    </div>
+    
+    @if (!mostrarFormulario) {
+      <button class="btn-primario" (click)="nuevaCita()">+ Agendar Cita</button>
+    }
+  </div>
+
+  @if (mostrarFormulario) {
+    <div class="tarjeta-formulario">
+      <h3>Agendar Nueva Cita</h3>
+      
+      <div class="grid-form">
+        <div class="input-group">
+          <label>Paciente</label>
+          <div class="caja-buscador">
+            <input type="text" readonly placeholder="Ningún paciente seleccionado" 
+                   [value]="pacienteSeleccionado ? pacienteSeleccionado.nombre + ' (DNI: ' + (pacienteSeleccionado.numeroIdentificacion || pacienteSeleccionado.numero_identificacion) + ')' : ''">
+            <button class="btn-buscar" (click)="abrirModalPaciente()">🔍 Buscar</button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Médico Asignado</label>
+          <div class="caja-buscador">
+            <input type="text" readonly placeholder="Ningún médico seleccionado"
+                   [value]="medicoSeleccionado ? 'Dr. ' + medicoSeleccionado.nombre + ' ' + medicoSeleccionado.apellido + ' (' + medicoSeleccionado.especialidad + ')' : ''">
+            <button class="btn-buscar" (click)="abrirModalMedico()">🔍 Buscar</button>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Fecha de la Cita</label>
+          <input type="date" [(ngModel)]="citaActual.fecha">
+        </div>
+
+        <div class="input-group">
+          <label>Hora</label>
+          <input type="time" [(ngModel)]="citaActual.hora">
+        </div>
+      </div>
+
+      <div class="form-acciones">
+        <button class="btn-secundario" (click)="cancelar()">Cancelar</button>
+        <button class="btn-primario" (click)="guardar()">Guardar Cita</button>
+      </div>
+    </div>
+  }
+
+  <div class="tabla-contenedor">
+    <table class="tabla-profesional">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha y Hora</th>
+          <th>Paciente</th>
+          <th>Médico</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (cita of listaCitas; track cita.id) {
+          <tr>
+            <td>{{ cita.id }}</td>
+            <td><strong>{{ cita.fecha }}</strong> a las {{ cita.hora }}</td>
+            <td>{{ cita.paciente?.nombre || 'Paciente ID: ' + cita.pacienteId }}</td>
+            <td>{{ cita.medico?.nombre || 'Médico ID: ' + cita.medicoId }}</td>
+            <td><span class="badge">Pendiente</span></td>
+            <td>
+              <button class="btn-accion delete" (click)="eliminar(cita.id)">❌</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="text-center">No hay citas agendadas por el momento.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+
+@if (mostrarModalPaciente) {
+  <div class="modal-fondo">
+    <div class="modal-contenido">
+      <div class="modal-header">
+        <h3>🔍 Buscar Paciente</h3>
+        <button class="btn-cerrar" (click)="mostrarModalPaciente = false">✖</button>
+      </div>
+      <input type="text" class="input-filtro" placeholder="Escribe el nombre o DNI..." [(ngModel)]="textoBusquedaPaciente">
+      
+      <ul class="lista-resultados">
+        @for (p of pacientesFiltrados; track p.id) {
+          <li>
+            <div>
+              <strong>{{ p.nombre }}</strong> <br>
+              <small>DNI: {{ p.numeroIdentificacion || p.numero_identificacion }}</small>
+            </div>
+            <button class="btn-seleccionar" (click)="seleccionarPaciente(p)">Seleccionar</button>
+          </li>
+        } @empty {
+          <li class="sin-resultados">No se encontraron pacientes.</li>
+        }
+      </ul>
+    </div>
+  </div>
+}
+
+@if (mostrarModalMedico) {
+  <div class="modal-fondo">
+    <div class="modal-contenido">
+      <div class="modal-header">
+        <h3>🔍 Buscar Médico</h3>
+        <button class="btn-cerrar" (click)="mostrarModalMedico = false">✖</button>
+      </div>
+      <input type="text" class="input-filtro" placeholder="Escribe nombre, apellido o especialidad..." [(ngModel)]="textoBusquedaMedico">
+      
+      <ul class="lista-resultados">
+        @for (m of medicosFiltrados; track m.id) {
+          <li>
+            <div>
+              <strong>Dr. {{ m.nombre }} {{ m.apellido }}</strong> <br>
+              <small class="badge">{{ m.especialidad }}</small>
+            </div>
+            <button class="btn-seleccionar" (click)="seleccionarMedico(m)">Seleccionar</button>
+          </li>
+        } @empty {
+          <li class="sin-resultados">No se encontraron médicos.</li>
+        }
+      </ul>
+    </div>
+  </div>
+}

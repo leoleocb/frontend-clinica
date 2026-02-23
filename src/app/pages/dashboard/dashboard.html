@@ -1,0 +1,35 @@
+ <div class="dashboard-wrapper">
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <img src="/images/logo-clinica.png" alt="Logo Medical Care" class="sidebar-logo">
+            <h2>Medical Care</h2>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a routerLink="/dashboard" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active" class="nav-item">Panel Principal</a>
+            <a routerLink="/dashboard/pacientes" routerLinkActive="active" class="nav-item">Pacientes</a>
+            <a routerLink="/dashboard/medicos" routerLinkActive="active" class="nav-item">Médicos</a>
+            <a routerLink="/dashboard/citas" routerLinkActive="active" class="nav-item">Citas Médicas</a>
+            <a routerLink="/dashboard/reportes" routerLinkActive="active" class="nav-item">Reportes</a>
+            </nav>
+
+        <div class="sidebar-footer">
+            <button class="btn-logout" (click)="cerrarSesion()">Cerrar Sesión</button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <h3>Sistema de Gestion Hospitalaria</h3>
+            <div class="user-profile">
+                <span>Hola, <strong>Administrador</strong></span>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <router-outlet></router-outlet>
+            </div>
+
+    </main>
+ </div>

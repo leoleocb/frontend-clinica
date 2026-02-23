@@ -1,0 +1,71 @@
+<div class="modulo-container">
+  
+  <div class="modulo-header">
+    <div>
+      <h2>Registro de Pacientes</h2>
+      <p>Gestión de historiales y datos personales</p>
+    </div>
+    
+    @if (!mostrarFormulario) {
+      <button class="btn-primario" (click)="nuevoPaciente()">+ Nuevo Paciente</button>
+    }
+  </div>
+
+  @if (mostrarFormulario) {
+    <div class="tarjeta-formulario">
+      <h3>{{ esEdicion ? 'Editar Paciente' : 'Registrar Nuevo Paciente' }}</h3>
+      
+      <div class="grid-form">
+        <div class="input-group">
+          <label>Nombre Completo</label>
+          <input type="text" [(ngModel)]="pacienteActual.nombre" placeholder="Ej. Juan Perez">
+        </div>
+        <div class="input-group">
+          <label>N° Identificación (DNI)</label>
+          <input type="text" [(ngModel)]="pacienteActual.numeroIdentificacion" placeholder="Ej. 12345678">
+        </div>
+        <div class="input-group">
+          <label>Fecha de Nacimiento</label>
+          <input type="date" [(ngModel)]="pacienteActual.fechaNacimiento">
+        </div>
+      </div>
+
+      <div class="form-acciones">
+        <button class="btn-secundario" (click)="cancelar()">Cancelar</button>
+        <button class="btn-primario" (click)="guardar()">Guardar Datos</button>
+      </div>
+    </div>
+  }
+
+  <div class="tabla-contenedor">
+    <table class="tabla-profesional">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre del Paciente</th>
+          <th>DNI / Identificación</th>
+          <th>Fecha Nacimiento</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (paciente of listaPacientes; track paciente.id) {
+          <tr>
+            <td>{{ paciente.id }}</td>
+            <td><strong>{{ paciente.nombre }}</strong></td>
+            <td>{{ paciente.numeroIdentificacion || paciente.numero_identificacion }}</td>
+            <td><span class="badge">{{ paciente.fechaNacimiento || paciente.fecha_nacimiento }}</span></td>
+            <td>
+              <button class="btn-accion edit" (click)="editarPaciente(paciente)">✏️</button>
+              <button class="btn-accion delete" (click)="eliminar(paciente.id)">🗑️</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="text-center">No hay pacientes registrados en el sistema.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

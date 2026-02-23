@@ -1,0 +1,73 @@
+<div class="modulo-container">
+  
+  <div class="modulo-header">
+    <div>
+      <h2>Directorio de Médicos</h2>
+      <p>Lista oficial del personal médico de la clínica</p>
+    </div>
+        <button class="btn-primario" (click)="nuevoMedico()">+ Nuevo Médico</button>
+
+  </div>
+
+  @if (mostrarFormulario) {
+    <div class="tarjeta-formulario">
+      <h3>{{ esEdicion ? 'Editar Médico' : 'Registrar Nuevo Médico' }}</h3>
+      
+      <div class="grid-form">
+        <div class="input-group">
+          <label>Nombre</label>
+          <input type="text" [(ngModel)]="medicoActual.nombre" placeholder="Ej. Juan">
+        </div>
+        <div class="input-group">
+          <label>Apellido</label>
+          <input type="text" [(ngModel)]="medicoActual.apellido" placeholder="Ej. Perez">
+        </div>
+        <div class="input-group">
+          <label>Especialidad</label>
+          <input type="text" [(ngModel)]="medicoActual.especialidad" placeholder="Ej. Pediatría">
+        </div>
+        <div class="input-group">
+          <label>Teléfono</label>
+          <input type="text" [(ngModel)]="medicoActual.telefono" placeholder="Ej. 987654321">
+        </div>
+      </div>
+
+      <div class="form-acciones">
+        <button class="btn-secundario" (click)="cancelar()">Cancelar</button>
+        <button class="btn-primario" (click)="guardar()">Guardar Datos</button>
+      </div>
+    </div>
+  }
+
+  <div class="tabla-contenedor">
+    <table class="tabla-profesional">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Especialidad</th>
+          <th>Teléfono</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (doctor of listaMedicos; track doctor.id) {
+          <tr>
+            <td>{{ doctor.id }}</td>
+            <td>{{ doctor.nombre }} {{ doctor.apellido }}</td>
+            <td><span class="badge">{{ doctor.especialidad }}</span></td>
+            <td>{{ doctor.telefono }}</td>
+            <td>
+              <button class="btn-accion edit" (click)="editarMedico(doctor)">✏️</button>
+              <button class="btn-accion delete" (click)="eliminar(doctor.id)">🗑️</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="text-center">No hay médicos registrados en el sistema.</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
