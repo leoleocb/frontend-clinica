@@ -6,18 +6,21 @@ import { Medicos } from './pages/medicos/medicos';
 import { Pacientes } from './pages/pacientes/pacientes';
 import { Citas } from './pages/citas/citas';
 import { Reportes } from './pages/reportes/reportes';
+import { Inicio } from './pages/inicio/inicio';
 
 export const routes: Routes = [
   { path: '', component: Login },
- { 
+  { 
     path: 'dashboard', 
     component: DashboardComponent, 
     canActivate: [authGuard],
     children: [
+      { path: 'inicio', component: Inicio }, 
       { path: 'medicos', component: Medicos },
       { path: 'pacientes', component: Pacientes },
       { path: 'citas', component: Citas },
-      { path: 'reportes', component: Reportes }
+      { path: 'reportes', component: Reportes },
+      { path: '', redirectTo: 'inicio', pathMatch: 'full' }
     ]
   },
   { path: '**', redirectTo: '' }

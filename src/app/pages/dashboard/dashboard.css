@@ -5,7 +5,6 @@
   margin: -40px -20px; 
 }
 
-
 .sidebar {
   width: 260px;
   background-color: var(--color-blanco);
@@ -72,7 +71,6 @@
   color: white;
 }
 
-
 .main-content {
   flex-grow: 1;
   display: flex;
@@ -109,4 +107,30 @@
 .welcome-card h1 {
   color: var(--color-primario-oscuro);
   margin-bottom: 10px;
+}
+
+/* --- ESTILOS DEL RELOJ DE SESIÓN --- */
+.badge-timer {
+  background-color: #eef2f7;
+  color: var(--color-primario-oscuro, #0d3582);
+  padding: 8px 15px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-right: 20px;
+  border: 1px solid #dce1e6;
+  transition: all 0.3s ease;
+}
+
+.badge-timer.peligro {
+  background-color: #fadbd8;
+  color: #c0392b;
+  border-color: #e74c3c;
+  animation: latido-peligro 1s infinite;
+}
+
+@keyframes latido-peligro {
+  0% { transform: scale(1); box-shadow: 0 0 0 rgba(231, 76, 60, 0); }
+  50% { transform: scale(1.05); box-shadow: 0 0 10px rgba(231, 76, 60, 0.5); }
+  100% { transform: scale(1); box-shadow: 0 0 0 rgba(231, 76, 60, 0); }
 }

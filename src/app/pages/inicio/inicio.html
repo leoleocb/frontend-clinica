@@ -1,0 +1,53 @@
+<div class="inicio-container">
+  
+  <div class="banner-bienvenida">
+    <div class="texto-bienvenida">
+      <h1>¡Hola, Administrador!</h1>
+      <p>Bienvenido al Sistema de Gestión Hospitalaria.</p>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card pacientes">
+      <div class="kpi-icono">👥</div>
+      <div class="kpi-info">
+        <h3>{{ totalPacientes }}</h3>
+        <p>Pacientes Registrados</p>
+      </div>
+    </div>
+
+    <div class="kpi-card medicos">
+      <div class="kpi-icono">👨‍⚕️</div>
+      <div class="kpi-info">
+        <h3>{{ totalMedicos }}</h3>
+        <p>Médicos Activos</p>
+      </div>
+    </div>
+
+    <div class="kpi-card citas">
+      <div class="kpi-icono">📅</div>
+      <div class="kpi-info">
+        <h3>{{ totalCitas }}</h3>
+        <p>Citas Agendadas</p>
+      </div>
+    </div>
+
+
+  </div>
+
+  <div class="accesos-rapidos">
+    <h2>⚡ Accesos Rápidos</h2>
+    <div class="botones-grid">
+      <a routerLink="/dashboard/citas" class="btn-acceso primary">
+        <span class="btn-icon">📅</span> Agendar Nueva Cita
+      </a>
+      <a routerLink="/dashboard/pacientes" class="btn-acceso secondary">
+        <span class="btn-icon">👥</span> Registrar Paciente
+      </a>
+      <a routerLink="/dashboard/reportes" class="btn-acceso dark">
+        <span class="btn-icon">📊</span> Generar Reportes PDF
+      </a>
+    </div>
+  </div>
+
+</div>

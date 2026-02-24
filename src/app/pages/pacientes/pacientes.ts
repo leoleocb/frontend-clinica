@@ -16,7 +16,15 @@ export class Pacientes implements OnInit {
   mostrarFormulario: boolean = false;
   esEdicion: boolean = false;
 
-  pacienteActual: any = { nombre: '', numeroIdentificacion: '', fechaNacimiento: '' };
+  pacienteActual: any = { 
+    nombres: '', 
+    apellidoPaterno: '', 
+    apellidoMaterno: '', 
+    numeroIdentificacion: '', 
+    fechaNacimiento: '',
+    telefono: '',
+    direccion: ''
+  };
 
   constructor(private pacienteService: Paciente) {}
 
@@ -26,16 +34,13 @@ export class Pacientes implements OnInit {
 
   cargarPacientes() {
     this.pacienteService.obtenerPacientes().subscribe({
-      next: (datos) => {
-        this.listaPacientes = datos;
-        console.log("Pacientes recibidos:", datos);
-      },
+      next: (datos) => this.listaPacientes = datos,
       error: (err) => console.error("Error al cargar pacientes", err)
     });
   }
 
   nuevoPaciente() {
-    this.pacienteActual = { nombre: '', numeroIdentificacion: '', fechaNacimiento: '' };
+    this.pacienteActual = { nombres: '', apellidoPaterno: '', apellidoMaterno: '', numeroIdentificacion: '', fechaNacimiento: '', telefono: '', direccion: '' };
     this.esEdicion = false;
     this.mostrarFormulario = true;
   }
@@ -50,7 +55,40 @@ export class Pacientes implements OnInit {
     this.mostrarFormulario = false;
   }
 
-  guardar() {
+ guardar() {
+    if (!this.pacienteActual.nombres || !this.pacienteActual.apellidoPaterno || 
+        !this.pacienteActual.apellidoMaterno || !this.pacienteActual.numeroIdentificacion || 
+        !this.pacienteActual.fechaNacimiento) {
+      Swal.fire('Atención', 'Por favor, completa todos los campos obligatorios (Nombres, Apellidos, DNI y Fecha).', 'warning');
+      return;
+    }
+
+    // 2. Validar que nombres y apellidos SOLO contengan letras y espacios
+    // Esta fórmula matemática (Regex) acepta letras mayúsculas, minúsculas, tildes y la letra ñ
+    const regexLetras = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+    
+    if (!regexLetras.test(this.pacienteActual.nombres) || 
+        !regexLetras.test(this.pacienteActual.apellidoPaterno) || 
+        !regexLetras.test(this.pacienteActual.apellidoMaterno)) {
+      Swal.fire('Formato Inválido', 'Los nombres y apellidos solo deben contener letras.', 'error');
+      return;
+    }
+
+    // 3. Validar DNI (Solo números y exactamente 8 dígitos)
+    const regexNumeros = /^[0-9]+$/;
+    
+    if (!regexNumeros.test(this.pacienteActual.numeroIdentificacion) || this.pacienteActual.numeroIdentificacion.length !== 8) {
+      Swal.fire('DNI Inválido', 'El número de identificación debe tener exactamente 8 números.', 'error');
+      return;
+    }
+
+    if (this.pacienteActual.telefono) {
+      if (!regexNumeros.test(this.pacienteActual.telefono) || this.pacienteActual.telefono.length !== 9) {
+        Swal.fire('Teléfono Inválido', 'El número de celular debe tener exactamente 9 dígitos numéricos.', 'error');
+        return;
+      }
+    }
+
     if (this.esEdicion) {
       this.pacienteService.actualizarPaciente(this.pacienteActual.id, this.pacienteActual).subscribe({
         next: () => {

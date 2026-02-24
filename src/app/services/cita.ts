@@ -21,6 +21,10 @@ export class Cita {
   }
 
   eliminarCita(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+      return this.http.delete(`${this.apiUrl}/${id}`);
+    }
+
+  marcarComoAtendida(id: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}/estado`, {});
   }
 }

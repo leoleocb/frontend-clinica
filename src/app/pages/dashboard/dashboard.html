@@ -1,4 +1,4 @@
- <div class="dashboard-wrapper">
+<div class="dashboard-wrapper">
 
     <aside class="sidebar">
         <div class="sidebar-header">
@@ -7,12 +7,12 @@
         </div>
 
         <nav class="sidebar-nav">
-            <a routerLink="/dashboard" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active" class="nav-item">Panel Principal</a>
+            <a routerLink="/dashboard/inicio" routerLinkActive="active" class="nav-item">Panel Principal</a>
             <a routerLink="/dashboard/pacientes" routerLinkActive="active" class="nav-item">Pacientes</a>
             <a routerLink="/dashboard/medicos" routerLinkActive="active" class="nav-item">Médicos</a>
             <a routerLink="/dashboard/citas" routerLinkActive="active" class="nav-item">Citas Médicas</a>
             <a routerLink="/dashboard/reportes" routerLinkActive="active" class="nav-item">Reportes</a>
-            </nav>
+        </nav>
 
         <div class="sidebar-footer">
             <button class="btn-logout" (click)="cerrarSesion()">Cerrar Sesión</button>
@@ -22,14 +22,20 @@
     <main class="main-content">
         <header class="topbar">
             <h3>Sistema de Gestion Hospitalaria</h3>
-            <div class="user-profile">
+            
+            <div class="user-profile" style="display: flex; align-items: center;">
+                
+                <span class="badge-timer" [class.peligro]="minutosCriticos">
+                    ⏱️ Sesión: {{ tiempoRestante }}
+                </span>
+
                 <span>Hola, <strong>Administrador</strong></span>
             </div>
         </header>
 
         <div class="content-area">
             <router-outlet></router-outlet>
-            </div>
+        </div>
 
     </main>
- </div>
+</div>

@@ -17,16 +17,32 @@
       
       <div class="grid-form">
         <div class="input-group">
-          <label>Nombre Completo</label>
-          <input type="text" [(ngModel)]="pacienteActual.nombre" placeholder="Ej. Juan Perez">
+          <label>Nombres</label>
+          <input type="text" [(ngModel)]="pacienteActual.nombres" placeholder="Ej. Juan Carlos">
+        </div>
+        <div class="input-group">
+          <label>Apellido Paterno</label>
+          <input type="text" [(ngModel)]="pacienteActual.apellidoPaterno" placeholder="Ej. Perez">
+        </div>
+        <div class="input-group">
+          <label>Apellido Materno</label>
+          <input type="text" [(ngModel)]="pacienteActual.apellidoMaterno" placeholder="Ej. Gomez">
         </div>
         <div class="input-group">
           <label>N° Identificación (DNI)</label>
-          <input type="text" [(ngModel)]="pacienteActual.numeroIdentificacion" placeholder="Ej. 12345678">
+          <input type="text" [(ngModel)]="pacienteActual.numeroIdentificacion" placeholder="Ej. 12345678" maxlength="8">
         </div>
         <div class="input-group">
           <label>Fecha de Nacimiento</label>
           <input type="date" [(ngModel)]="pacienteActual.fechaNacimiento">
+        </div>
+        <div class="input-group">
+          <label>Teléfono (9 dígitos)</label>
+          <input type="text" [(ngModel)]="pacienteActual.telefono" placeholder="Ej. 987654321" maxlength="9">
+        </div>
+        <div class="input-group" style="grid-column: 1 / -1;">
+          <label>Dirección Domiciliaria</label>
+          <input type="text" [(ngModel)]="pacienteActual.direccion" placeholder="Ej. Av. Los Olivos 123, Lima">
         </div>
       </div>
 
@@ -42,9 +58,9 @@
       <thead>
         <tr>
           <th>ID</th>
-          <th>Nombre del Paciente</th>
-          <th>DNI / Identificación</th>
-          <th>Fecha Nacimiento</th>
+          <th>Paciente (Apellidos y Nombres)</th>
+          <th>DNI</th>
+          <th>Teléfono</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -52,12 +68,12 @@
         @for (paciente of listaPacientes; track paciente.id) {
           <tr>
             <td>{{ paciente.id }}</td>
-            <td><strong>{{ paciente.nombre }}</strong></td>
+            <td><strong>{{ paciente.apellidoPaterno }} {{ paciente.apellidoMaterno }}, {{ paciente.nombres }}</strong></td>
             <td>{{ paciente.numeroIdentificacion || paciente.numero_identificacion }}</td>
-            <td><span class="badge">{{ paciente.fechaNacimiento || paciente.fecha_nacimiento }}</span></td>
+            <td>{{ paciente.telefono || 'No registrado' }}</td>
             <td>
-              <button class="btn-accion edit" (click)="editarPaciente(paciente)">✏️</button>
-              <button class="btn-accion delete" (click)="eliminar(paciente.id)">🗑️</button>
+              <button class="btn-accion edit" (click)="editarPaciente(paciente)" title="Editar">✏️</button>
+              <button class="btn-accion delete" (click)="eliminar(paciente.id)" title="Eliminar">🗑️</button>
             </td>
           </tr>
         } @empty {

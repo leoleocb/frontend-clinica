@@ -82,15 +82,14 @@ export class Citas implements OnInit {
 
 
   get pacientesFiltrados() {
-    const termino = this.textoBusquedaPaciente.toLowerCase();
-    return this.listaPacientes.filter(p => {
-      const nombre = (p.nombre || '').toLowerCase();
-      const dni = (p.numeroIdentificacion || p.numero_identificacion || '').toLowerCase();
-      return nombre.includes(termino) || dni.includes(termino);
+      const termino = this.textoBusquedaPaciente.toLowerCase();
+      return this.listaPacientes.filter(p => {
+      const nombreCompleto = (`${p.nombres || ''} ${p.apellidoPaterno || ''} ${p.apellidoMaterno || ''}`).toLowerCase();   
+       const dni = (p.numeroIdentificacion || p.numero_identificacion || '').toLowerCase();
+      return nombreCompleto.includes(termino) || dni.includes(termino);
     });
   }
 
-  // Filtra médicos por Nombre, Apellido o Especialidad
   get medicosFiltrados() {
     const termino = this.textoBusquedaMedico.toLowerCase();
     return this.listaMedicos.filter(m => {
@@ -114,5 +113,26 @@ export class Citas implements OnInit {
     this.medicoSeleccionado = medico;
     this.citaActual.medicoId = medico.id;
     this.mostrarModalMedico = false;
+  }
+  marcarAtendido(id: number) {
+    Swal.fire({
+      title: '¿Paciente Atendido?',
+      text: "La cita pasará a historial médico.",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#27ae60', // Verde
+      cancelButtonColor: '#95a5a6',
+      confirmButtonText: 'Sí, confirmar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.citaService.marcarComoAtendida(id).subscribe({
+          next: () => {
+            Swal.fire('¡Atendido!', 'La cita se completó exitosamente.', 'success');
+            this.cargarCitas(); // Recargamos la tabla
+          }
+        });
+      }
+    });
   }
 }

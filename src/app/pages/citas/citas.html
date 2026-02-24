@@ -2,7 +2,7 @@
   
   <div class="modulo-header">
     <div>
-      <h2>📅 Citas Médicas</h2>
+      <h2>Citas Médicas</h2>
       <p>Agendamiento y control de turnos</p>
     </div>
     
@@ -20,7 +20,7 @@
           <label>Paciente</label>
           <div class="caja-buscador">
             <input type="text" readonly placeholder="Ningún paciente seleccionado" 
-                   [value]="pacienteSeleccionado ? pacienteSeleccionado.nombre + ' (DNI: ' + (pacienteSeleccionado.numeroIdentificacion || pacienteSeleccionado.numero_identificacion) + ')' : ''">
+                   [value]="pacienteSeleccionado ? pacienteSeleccionado.apellidoPaterno + ' ' + pacienteSeleccionado.apellidoMaterno + ', ' + pacienteSeleccionado.nombres + ' (DNI: ' + (pacienteSeleccionado.numeroIdentificacion || pacienteSeleccionado.numero_identificacion) + ')' : ''">
             <button class="btn-buscar" (click)="abrirModalPaciente()">🔍 Buscar</button>
           </div>
         </div>
@@ -65,18 +65,29 @@
         </tr>
       </thead>
       <tbody>
-        @for (cita of listaCitas; track cita.id) {
+@for (cita of listaCitas; track cita.id) {
           <tr>
             <td>{{ cita.id }}</td>
             <td><strong>{{ cita.fecha }}</strong> a las {{ cita.hora }}</td>
-            <td>{{ cita.paciente?.nombre || 'Paciente ID: ' + cita.pacienteId }}</td>
-            <td>{{ cita.medico?.nombre || 'Médico ID: ' + cita.medicoId }}</td>
-            <td><span class="badge">Pendiente</span></td>
+            
+            <td>{{ cita.pacienteNombre }}</td>
+            <td><strong>{{ cita.medicoNombre }}</strong></td>
+            
             <td>
-              <button class="btn-accion delete" (click)="eliminar(cita.id)">❌</button>
+              <span class="badge" [style.background-color]="cita.estado === 'ATENDIDA' ? '#d4edda' : 'rgba(52, 152, 219, 0.15)'"
+                                 [style.color]="cita.estado === 'ATENDIDA' ? '#155724' : 'var(--color-primario-claro)'">
+                {{ cita.estado }}
+              </span>
+            </td>
+            
+            <td>
+              @if (cita.estado === 'PENDIENTE') {
+                <button class="btn-accion edit" (click)="marcarAtendido(cita.id)" title="Marcar como atendida">✅</button>
+              }
+              <button class="btn-accion delete" (click)="eliminar(cita.id)" title="Cancelar cita">❌</button>
             </td>
           </tr>
-        } @empty {
+        }@empty {
           <tr>
             <td colspan="6" class="text-center">No hay citas agendadas por el momento.</td>
           </tr>
@@ -99,7 +110,7 @@
         @for (p of pacientesFiltrados; track p.id) {
           <li>
             <div>
-              <strong>{{ p.nombre }}</strong> <br>
+              <strong>{{ p.nombres }} {{ p.apellidoPaterno }} {{ p.apellidoMaterno }}</strong> <br>
               <small>DNI: {{ p.numeroIdentificacion || p.numero_identificacion }}</small>
             </div>
             <button class="btn-seleccionar" (click)="seleccionarPaciente(p)">Seleccionar</button>
