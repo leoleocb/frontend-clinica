@@ -1,0 +1,121 @@
+/* Tarjeta principal */
+.welcome-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    margin: 20px;
+}
+
+/* Botón de arriba a la derecha */
+.btn-nuevo {
+    background-color: #0d3582;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-nuevo:hover {
+    background-color: #1a4aab;
+}
+
+/* Estilos de la Tabla */
+.table-responsive {
+    overflow-x: auto;
+    margin-top: 15px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    border-bottom: 1px solid #eee;
+    padding: 15px;
+    text-align: left;
+}
+
+.table th {
+    background-color: #f4f7fc;
+    color: #0d3582;
+    font-weight: bold;
+}
+
+/* Botones de acción en la tabla */
+.btn-editar {
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 8px;
+}
+
+.btn-eliminar {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Estilos del Formulario */
+.formulario-card {
+    background: #f8fafc;
+    padding: 25px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #334155;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+/* Botones de Guardar y Cancelar */
+.btn-guardar {
+    background-color: #10b981;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-guardar:disabled {
+    background-color: #94a3b8;
+    cursor: not-allowed;
+}
+
+.btn-cancelar {
+    background-color: #64748b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}

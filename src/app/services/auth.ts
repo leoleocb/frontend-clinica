@@ -9,7 +9,7 @@ import { Observable } from "rxjs";
 })
 export class Auth {
 
-private apiUrl = 'http://localhost:8000/api/auth/login';
+private apiUrl = 'http://localhost:8080/ms-auth/api/auth/login';
 
   constructor(private http: HttpClient) {}
 

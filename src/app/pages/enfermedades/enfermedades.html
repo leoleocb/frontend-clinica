@@ -1,0 +1,66 @@
+<div class="welcome-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1 style="color: #0d3582; margin: 0;">Historial de Enfermedades</h1>
+        <button class="btn-nuevo" (click)="abrirFormulario()" *ngIf="!mostrarFormulario">
+            + Registrar Diagnóstico
+        </button>
+    </div>
+
+    <div class="table-responsive" *ngIf="!mostrarFormulario">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Paciente</th>
+                    <th>Enfermedad</th>
+                    <th>Descripción Diagnóstico</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let enf of enfermedades">
+                    <td>{{ enf.id }}</td>
+                    <td><strong>{{ enf.nombrePaciente }}</strong></td>
+                    <td>{{ enf.nombre }}</td>
+                    <td>{{ enf.descripcion }}</td>
+                    <td>
+                        <button class="btn-editar" (click)="abrirFormulario(enf)">Editar</button>
+                        <button class="btn-eliminar" (click)="eliminar(enf.id)">Borrar</button>
+                    </td>
+                </tr>
+                <tr *ngIf="enfermedades.length === 0">
+                    <td colspan="5" style="text-align: center;">No hay registros en el historial.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="formulario-card" *ngIf="mostrarFormulario">
+        <h3>{{ enfermedadActual.id ? 'Editar Registro' : 'Nuevo Registro Médico' }}</h3>
+        
+        <div class="form-group">
+            <label>Seleccionar Paciente:</label>
+            <select [(ngModel)]="enfermedadActual.pacienteId" class="form-control">
+                <option [ngValue]="null" disabled>-- Elija un paciente --</option>
+                <option *ngFor="let pac of pacientes" [ngValue]="pac.id">
+                    {{ pac.nombres }} {{ pac.apellidoPaterno }}
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Nombre de la Enfermedad:</label>
+            <input type="text" [(ngModel)]="enfermedadActual.nombre" class="form-control" placeholder="Ej: Diabetes Tipo 2">
+        </div>
+
+        <div class="form-group">
+            <label>Descripción / Observaciones:</label>
+            <textarea [(ngModel)]="enfermedadActual.descripcion" class="form-control" rows="3" placeholder="Detalles del diagnóstico..."></textarea>
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button class="btn-guardar" (click)="guardar()" [disabled]="!enfermedadActual.pacienteId || !enfermedadActual.nombre">Guardar Historial</button>
+            <button class="btn-cancelar" (click)="cerrarFormulario()" style="margin-left: 10px;">Cancelar</button>
+        </div>
+    </div>
+</div>

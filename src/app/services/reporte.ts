@@ -7,7 +7,8 @@ import { Observable } from 'rxjs';
 })
 export class Reporte {
   
-  private apiUrl = 'http://localhost:8003/api/reportes';
+  private apiUrl = 'http://localhost:8080/ms-reportes/api/reportes';
+
 
   constructor(private http: HttpClient) { }
 

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 export class Cita {
   
 
-  private apiUrl = 'http://localhost:8002/api/citas';
+  private apiUrl = 'http://localhost:8080/ms-clinica/api/citas';
 
   constructor(private http: HttpClient) { }
 

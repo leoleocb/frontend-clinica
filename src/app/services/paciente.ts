@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class Paciente {
   
-  private apiUrl = 'http://localhost:8001/api/pacientes';
+  private apiUrl = 'http://localhost:8080/ms-admin/api/pacientes';
 
   constructor(private http: HttpClient) { }
 

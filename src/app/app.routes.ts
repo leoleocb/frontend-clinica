@@ -7,7 +7,7 @@ import { Pacientes } from './pages/pacientes/pacientes';
 import { Citas } from './pages/citas/citas';
 import { Reportes } from './pages/reportes/reportes';
 import { Inicio } from './pages/inicio/inicio';
-
+import { EnfermedadesComponent } from './pages/enfermedades/enfermedades';
 export const routes: Routes = [
   { path: '', component: Login },
   { 
@@ -20,6 +20,7 @@ export const routes: Routes = [
       { path: 'pacientes', component: Pacientes },
       { path: 'citas', component: Citas },
       { path: 'reportes', component: Reportes },
+      { path: 'enfermedades', component: EnfermedadesComponent },
       { path: '', redirectTo: 'inicio', pathMatch: 'full' }
     ]
   },
