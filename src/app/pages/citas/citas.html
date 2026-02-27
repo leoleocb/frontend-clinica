@@ -36,7 +36,7 @@
 
         <div class="input-group">
           <label>Fecha de la Cita</label>
-          <input type="date" [(ngModel)]="citaActual.fecha">
+          <input type="date" [(ngModel)]="citaActual.fecha" [min]="fechaMinima">
         </div>
 
         <div class="input-group">
@@ -65,7 +65,7 @@
         </tr>
       </thead>
       <tbody>
-@for (cita of listaCitas; track cita.id) {
+        @for (cita of listaCitas; track cita.id) {
           <tr>
             <td>{{ cita.id }}</td>
             <td><strong>{{ cita.fecha }}</strong> a las {{ cita.hora }}</td>

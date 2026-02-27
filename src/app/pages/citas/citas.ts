@@ -30,12 +30,23 @@ export class Citas implements OnInit {
   textoBusquedaPaciente: string = '';
   textoBusquedaMedico: string = '';
 
+  fechaMinima: string = '';
+
   constructor(private citaService: Cita, private medicoService: Medico, private pacienteService: Paciente) {}
 
   ngOnInit() {
     this.cargarCitas();
     this.cargarMedicos();
     this.cargarPacientes();
+    this.establecerFechaMinima();
+  }
+
+  establecerFechaMinima() {
+    const hoy = new Date();
+    const year = hoy.getFullYear();
+    const month = (hoy.getMonth() + 1).toString().padStart(2, '0');
+    const day = hoy.getDate().toString().padStart(2, '0');
+    this.fechaMinima = `${year}-${month}-${day}`;
   }
 
   cargarCitas() { this.citaService.obtenerCitas().subscribe({ next: (d) => this.listaCitas = d }); }
@@ -55,6 +66,27 @@ export class Citas implements OnInit {
     if(!this.citaActual.pacienteId || !this.citaActual.medicoId) {
       Swal.fire('Atención', 'Debes seleccionar un paciente y un médico', 'warning');
       return;
+    }
+    if(!this.citaActual.fecha || !this.citaActual.hora) {
+      Swal.fire('Atención', 'Debes seleccionar una fecha y una hora', 'warning');
+      return;
+    }
+
+    const fechaSeleccionada = this.citaActual.fecha;
+    const horaSeleccionada = this.citaActual.hora;
+    const hoy = new Date();
+    
+    if (fechaSeleccionada === this.fechaMinima) {
+      const horaActual = hoy.getHours().toString().padStart(2, '0') + ':' + hoy.getMinutes().toString().padStart(2, '0');
+      
+      if (horaSeleccionada < horaActual) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Hora Inválida',
+          text: 'La hora seleccionada ya pasó. Por favor, elige una hora en el futuro.'
+        });
+        return; 
+      }
     }
 
     this.citaService.crearCita(this.citaActual).subscribe({
@@ -79,7 +111,6 @@ export class Citas implements OnInit {
       }
     });
   }
-
 
   get pacientesFiltrados() {
       const termino = this.textoBusquedaPaciente.toLowerCase();
@@ -114,6 +145,7 @@ export class Citas implements OnInit {
     this.citaActual.medicoId = medico.id;
     this.mostrarModalMedico = false;
   }
+
   marcarAtendido(id: number) {
     Swal.fire({
       title: '¿Paciente Atendido?',
@@ -129,7 +161,7 @@ export class Citas implements OnInit {
         this.citaService.marcarComoAtendida(id).subscribe({
           next: () => {
             Swal.fire('¡Atendido!', 'La cita se completó exitosamente.', 'success');
-            this.cargarCitas(); // Recargamos la tabla
+            this.cargarCitas(); 
           }
         });
       }
