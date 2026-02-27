@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
-import { EnfermedadService } from '../../services/enfermedad';
+import { EnfermedadService } from '../../services/enfermedad'; 
+
 @Component({
   selector: 'app-enfermedades',
   standalone: true,
@@ -23,6 +24,10 @@ export class EnfermedadesComponent implements OnInit {
     pacienteId: null
   };
 
+  pacienteSeleccionado: any = null;
+  mostrarModalPaciente: boolean = false;
+  textoBusquedaPaciente: string = '';
+
   constructor(
     private enfermedadService: EnfermedadService,
     private http: HttpClient
@@ -34,14 +39,13 @@ export class EnfermedadesComponent implements OnInit {
   }
 
   cargarEnfermedades() {
-    this.enfermedadService.listar().subscribe(data => {
+    this.enfermedadService.listar().subscribe((data: any) => {
       this.enfermedades = data;
     });
   }
 
-  // Traemos los pacientes desde ms-admin a través del API Gateway
   cargarPacientes() {
-    this.http.get<any[]>('http://localhost:8080/ms-admin/api/pacientes').subscribe(data => {
+    this.http.get<any[]>('http://localhost:8080/ms-admin/api/pacientes').subscribe((data: any) => {
       this.pacientes = data;
     });
   }
@@ -49,8 +53,10 @@ export class EnfermedadesComponent implements OnInit {
   abrirFormulario(enfermedad: any = null) {
     if (enfermedad) {
       this.enfermedadActual = { ...enfermedad };
+      this.pacienteSeleccionado = this.pacientes.find(p => p.id === enfermedad.pacienteId) || null;
     } else {
       this.enfermedadActual = { nombre: '', descripcion: '', pacienteId: null };
+      this.pacienteSeleccionado = null;
     }
     this.mostrarFormulario = true;
   }
@@ -60,6 +66,11 @@ export class EnfermedadesComponent implements OnInit {
   }
 
   guardar() {
+    if (!this.enfermedadActual.pacienteId || !this.enfermedadActual.nombre) {
+      Swal.fire('Atención', 'Debe seleccionar un paciente y poner un nombre a la enfermedad', 'warning');
+      return;
+    }
+
     if (this.enfermedadActual.id) {
       this.enfermedadService.actualizar(this.enfermedadActual.id, this.enfermedadActual).subscribe(() => {
         Swal.fire('¡Éxito!', 'Historial actualizado correctamente', 'success');
@@ -77,13 +88,8 @@ export class EnfermedadesComponent implements OnInit {
 
   eliminar(id: number) {
     Swal.fire({
-      title: '¿Estás seguro?',
-      text: "Se borrará este registro del historial",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#0d3582',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminar'
+      title: '¿Estás seguro?', text: "Se borrará este registro del historial", icon: 'warning',
+      showCancelButton: true, confirmButtonColor: '#0d3582', cancelButtonColor: '#d33', confirmButtonText: 'Sí, eliminar'
     }).then((result) => {
       if (result.isConfirmed) {
         this.enfermedadService.eliminar(id).subscribe(() => {
@@ -92,5 +98,25 @@ export class EnfermedadesComponent implements OnInit {
         });
       }
     });
+  }
+
+  get pacientesFiltrados() {
+    const termino = this.textoBusquedaPaciente.toLowerCase();
+    return this.pacientes.filter(p => {
+      const nombreCompleto = (`${p.nombres || ''} ${p.apellidoPaterno || ''} ${p.apellidoMaterno || ''}`).toLowerCase();   
+      const dni = (p.numeroIdentificacion || p.numero_identificacion || '').toLowerCase();
+      return nombreCompleto.includes(termino) || dni.includes(termino);
+    });
+  }
+
+  abrirModalPaciente() { 
+    this.mostrarModalPaciente = true; 
+    this.textoBusquedaPaciente = ''; 
+  }
+  
+  seleccionarPaciente(paciente: any) {
+    this.pacienteSeleccionado = paciente;
+    this.enfermedadActual.pacienteId = paciente.id;
+    this.mostrarModalPaciente = false;
   }
 }

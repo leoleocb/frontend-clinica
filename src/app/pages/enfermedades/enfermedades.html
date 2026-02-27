@@ -40,12 +40,13 @@
         
         <div class="form-group">
             <label>Seleccionar Paciente:</label>
-            <select [(ngModel)]="enfermedadActual.pacienteId" class="form-control">
-                <option [ngValue]="null" disabled>-- Elija un paciente --</option>
-                <option *ngFor="let pac of pacientes" [ngValue]="pac.id">
-                    {{ pac.nombres }} {{ pac.apellidoPaterno }}
-                </option>
-            </select>
+            <div class="caja-buscador" style="display: flex; gap: 10px;">
+                <input type="text" readonly class="form-control" placeholder="Ningún paciente seleccionado" 
+                       [value]="pacienteSeleccionado ? pacienteSeleccionado.apellidoPaterno + ' ' + pacienteSeleccionado.apellidoMaterno + ', ' + pacienteSeleccionado.nombres + ' (DNI: ' + (pacienteSeleccionado.numeroIdentificacion || pacienteSeleccionado.numero_identificacion) + ')' : ''"
+                       style="flex: 1; background-color: #f8fafc; cursor: not-allowed;">
+                
+                <button class="btn-buscar" (click)="abrirModalPaciente()">🔍 Buscar</button>
+            </div>
         </div>
 
         <div class="form-group">
@@ -63,4 +64,28 @@
             <button class="btn-cancelar" (click)="cerrarFormulario()" style="margin-left: 10px;">Cancelar</button>
         </div>
     </div>
+</div>
+
+<div class="modal-fondo" *ngIf="mostrarModalPaciente">
+  <div class="modal-contenido">
+    <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">
+      <h3 style="margin: 0; color: #0d3582;">🔍 Buscar Paciente</h3>
+      <button class="btn-cerrar" (click)="mostrarModalPaciente = false" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #666;">✖</button>
+    </div>
+    
+    <input type="text" class="input-filtro" placeholder="Escribe el nombre o DNI..." [(ngModel)]="textoBusquedaPaciente" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-bottom: 15px; box-sizing: border-box;">
+    
+    <ul class="lista-resultados" style="list-style: none; padding: 0; max-height: 300px; overflow-y: auto;">
+      <li *ngFor="let p of pacientesFiltrados" style="display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #f0f0f0;">
+        <div>
+          <strong>{{ p.nombres }} {{ p.apellidoPaterno }} {{ p.apellidoMaterno }}</strong> <br>
+          <small style="color: #666;">DNI: {{ p.numeroIdentificacion || p.numero_identificacion }}</small>
+        </div>
+        <button class="btn-seleccionar" (click)="seleccionarPaciente(p)" style="background-color: #0d3582; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">Seleccionar</button>
+      </li>
+      <li class="sin-resultados" *ngIf="pacientesFiltrados.length === 0" style="text-align: center; padding: 20px; color: #999;">
+        No se encontraron pacientes.
+      </li>
+    </ul>
+  </div>
 </div>
