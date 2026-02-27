@@ -7,7 +7,6 @@ import { Observable } from 'rxjs';
 })
 export class Cita {
   
-
   private apiUrl = 'http://localhost:8080/ms-clinica/api/citas';
 
   constructor(private http: HttpClient) { }
@@ -22,9 +21,13 @@ export class Cita {
 
   eliminarCita(id: number): Observable<any> {
       return this.http.delete(`${this.apiUrl}/${id}`);
-    }
+  }
 
   marcarComoAtendida(id: number): Observable<any> {
     return this.http.put(`${this.apiUrl}/${id}/estado`, {});
+  }
+
+  cancelarCita(id: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}/cancelar`, {});
   }
 }

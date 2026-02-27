@@ -74,8 +74,9 @@
             <td><strong>{{ cita.medicoNombre }}</strong></td>
             
             <td>
-              <span class="badge" [style.background-color]="cita.estado === 'ATENDIDA' ? '#d4edda' : 'rgba(52, 152, 219, 0.15)'"
-                                 [style.color]="cita.estado === 'ATENDIDA' ? '#155724' : 'var(--color-primario-claro)'">
+              <span class="badge" 
+                    [style.background-color]="cita.estado === 'ATENDIDA' ? '#d4edda' : (cita.estado === 'CANCELADA' ? '#f8d7da' : 'rgba(52, 152, 219, 0.15)')"
+                    [style.color]="cita.estado === 'ATENDIDA' ? '#155724' : (cita.estado === 'CANCELADA' ? '#721c24' : 'var(--color-primario-claro)')">
                 {{ cita.estado }}
               </span>
             </td>
@@ -83,8 +84,8 @@
             <td>
               @if (cita.estado === 'PENDIENTE') {
                 <button class="btn-accion edit" (click)="marcarAtendido(cita.id)" title="Marcar como atendida">✅</button>
+                <button class="btn-accion delete" (click)="eliminar(cita.id)" title="Cancelar cita">❌</button>
               }
-              <button class="btn-accion delete" (click)="eliminar(cita.id)" title="Cancelar cita">❌</button>
             </td>
           </tr>
         }@empty {

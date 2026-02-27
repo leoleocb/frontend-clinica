@@ -101,12 +101,21 @@ export class Citas implements OnInit {
 
   eliminar(id: number) {
     Swal.fire({
-      title: '¿Cancelar Cita?', icon: 'warning', showCancelButton: true,
-      confirmButtonColor: '#e74c3c', confirmButtonText: 'Sí, cancelar'
+      title: '¿Cancelar Cita?', 
+      text: "La cita quedará anulada en el historial", 
+      icon: 'warning', 
+      showCancelButton: true,
+      confirmButtonColor: '#e74c3c', 
+      cancelButtonColor: '#95a5a6',
+      confirmButtonText: 'Sí, cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.citaService.eliminarCita(id).subscribe({
-          next: () => { Swal.fire('Cancelada', 'La cita ha sido eliminada.', 'success'); this.cargarCitas(); }
+        this.citaService.cancelarCita(id).subscribe({
+          next: () => { 
+            Swal.fire('Cancelada', 'La cita cambió a estado CANCELADA.', 'success'); 
+            this.cargarCitas(); 
+          },
+          error: () => Swal.fire('Error', 'No se pudo cancelar la cita', 'error')
         });
       }
     });
